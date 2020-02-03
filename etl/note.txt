@@ -20,3 +20,5 @@ public     | audit_logs                          |    1623690
 
 
 pg_restore -v -c -C -x -O -d impulsify impulsify_01_28_2019.dump -U postgres
+
+psql -d impulsify -U postgres -h localhost -p 5432
