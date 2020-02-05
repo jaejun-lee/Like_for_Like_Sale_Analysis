@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+from sklearn.metrics import mean_squared_error
+
 
 IAO = 0.68 #Industry Average Occupancy
 DIM = 30.62 #Days in one month
@@ -18,7 +20,7 @@ class Store(object):
         self.average_occupancy = average_occupancy
 
     def get_brand(self):
-        return self.property_name[0:5]
+        return self.property_name[0:5].lower()
         
     def get_spor(self):
         return np.round(self.revenue / (self.num_of_rooms * self.average_occupancy * DIM), decimals=2)
@@ -75,10 +77,16 @@ class Impulsify(object):
     def predict(self, X):
         '''
         INPUT:
-            -X: list of store 
-        OUTPUT: list of store - comparable stores
+            -X: nnumpy array of store 
+        OUTPUT: numpy array of store - comparable stores
         '''
-   
+        m, n = X.shape
+        y = np.array(m)
+        for i, e in enumerate(X):
+            y[i] = Store.from_numpy(self.X[self.X.brand == e.get_brand()].to_numpy()[0]) 
+
+        return y
+        
     def predict_one(self, x):
         '''
         INPUT:
@@ -86,6 +94,12 @@ class Impulsify(object):
         OUTPUT: comparable store
         '''
         return Store.from_numpy(self.X[self.X.brand == x.get_brand()].to_numpy()[0])
+    
+    def score(self, X, y=None):
+        stores_hat = self.predict(X)
+        y_hat = [store.get_spor() for store in stores_hat]
+        y = [store.get_spor() for store in X]
+        return mean_squared_error(y, y_hat)
     
     
 if __name__ == '__main__':
@@ -98,4 +112,29 @@ if __name__ == '__main__':
     model.fit(df_X)
     y = model.predict_one(x)
     z = x.upgrade_to(y)
+
+    #test score function
+    test_property = np.random.choice(df_X.property_name.unique(), size=90)
+    df_X_test = df_X[df_X.property_name.isin(test_property)]
+    df_X_train = df_X.loc[df_X.index.difference(df_X_test.index)]
+    X.brand = X.property_name.apply(lambda x: x[0:5].lower())
+    df_X_test = df_X_test.groupby(by="brand").agg({"num_of_rooms": np.mean, "revenue" : np.mean, "profit_margin" : np.mean}).reset_index()
+    df_X_test = df_X_test.round(decimals = {"num_of_rooms": 0, "revenue" : 2, "profit_margin" : 4})
+    
+    
+    model = Impulsify()
+    model.fit(df_X)
+    lst = []
+    for index, row in df_X_test.iterrows():
+        lst.append(Store(row.brand, row.num_of_rooms, row.revenue, row.property_name))
+    X_test = np.array(lst)
+    model = Impulsify()
+    model.fit(df_X)
+    print(model.score(X_test))
+
+
+
+
+
+
 

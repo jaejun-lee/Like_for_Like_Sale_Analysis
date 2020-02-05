@@ -93,7 +93,7 @@ class Pipeline(object):
     '''
 
 
-    def __init__(self, conn, ):
+    def __init__(self, conn=None):
         """
         Parameters
         ----------
@@ -205,10 +205,12 @@ class Pipeline(object):
         self.data2019_monthly = self.data2019_monthly.merge(right=pipeline.properties, how='left', on="property_code", validate='one_to_one')
         self.data2019_monthly.drop(columns=["name", "rooms"], inplace=True)
 
-
     def save_data2019(self, file_path="../data/data2019.pkl"):
         self.data2019.to_pickle(path=file_path)
-        self.data2019_monthly.to_pickle(path=f'{file_path}_monthly')
+        self.data2019_monthly.to_pickle(path="../data/data2019_monthly.pkl")
+
+    def from_pickle_data2019(self, file_path="../data/data2019_monthly.pkl"):
+        self.data2019_monthly = pd.read_pickle("../data/data2019_monthly.pkl")
 
 if __name__ == '__main__':
 
