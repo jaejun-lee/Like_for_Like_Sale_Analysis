@@ -8,14 +8,14 @@
 </p>
 
 # Business Explained
-Impulsify provide its solution to Retail as Secondary business such as Hotel Pantry, Gym retail section, Apartment Convenience store and etc. Those are good to have, but usually not that great in terms of management overhead and financial balance sheet. Impulsify has proven that they can improve sales and operation efficiency through sales/inventory data analytic, automated payment system and it's expertise design and setup.
+Impulsify provides its solution to Retail as Secondary business such as Hotel Pantry, Gym retail section, Apartment Convenience store, etc. Those are good to have, but usually not that great in terms of management overhead and financial balance sheet. Impulsify has proven that they can improve sales and operational efficiency through sales/inventory data analytic, automated payment system and it's expertise design and setup.
 
 # What's going on.
 After all, it's getting lots of interest from prospective customers. They like to develop a model to analyze sales data from the current stores and guide the business opportunity of future stores. It will help the customer make the business decision quickly with confidence to adopt Impulsify solutions for their stores.
 
 # Data
-They provided snapshot(dump) from Postgres Database and a Xcel spread sheet with aggregated sales and profit margin for each stores for year 2019. I combined them into Pandas DataFrame.
-There are about 460 store observations for last year. It's clean dataset from the established busines. 
+They provided snapshots (dump) from Postgres Database and an excel spreadsheet with aggregated sales and profit margin for each store for the year 2019. I combined them into Pandas DataFrame.
+There are about 460 store observations for last year. It's a clean dataset from the established business. 
 
 |     | property_name                                | property_code   | brand   |   num_of_rooms |   revenue |   profit_margin |   gross_profit |   id | address              | city        | state   |   zip | kind           | time_zone                  | location_type   |   flag_id | flag_name         |   brand_id | brand_name   | brand_code   | region   | hotel_size   |     spor |
 |----:|:---------------------------------------------|:----------------|:--------|---------------:|----------:|----------------:|---------------:|-----:|:---------------------|:------------|:--------|------:|:---------------|:---------------------------|:----------------|----------:|:------------------|-----------:|:-------------|:-------------|:---------|:-------------|---------:|
@@ -109,7 +109,7 @@ Current SPOR: $1.51
 </p>
 <p> tru b SPOR Distribution </p>
 
-<p> brand_code is easy to interprete but, SPOR distibution within some cluster do not form pattern, or right skewed with long tail. There needs to sub cluster to improve SPOR distribution.</P>
+<p> brand_code is easy to interpret but, SPOR distribution within does not form a pattern for several clusters and The largest cluster, hilto, is right-skewed with a long tail. There needs to sub-cluster to improve SPOR distribution.</P>
 
 ## Prediction Performance of brand_code
 
@@ -163,7 +163,7 @@ num of rooms already applied in SPOR, but there is little bit of linearity remai
 </div>
 
 ## by grid search for regressive elimination of feature (Step Backward), 
-15 - 20 features are appropriate to improve MSE or R2 scores. However, score does not improve. By nature, KNN do not guarantee the close distance neighbors will share similiar targets. Also, real cluster could be differ dramatically between because it's business lean toward 2 or 3 brands. location_type and region is promissing, but region's distribution are also heavily toward south reigion.
+15 - 20 features are appropriate to improve MSE or R2 scores. However, the score does not improve from brand_code cluster method. The close neighbors seem not to share the same interests in target, SPOR. Also, the real cluster could differ dramatically because most of the brands lean toward 2 or 3 brands. location_type and region are promising, but the region's distribution is also heavily toward the south region.
 
 With 24 features eliminated we have an MSE of 0.878 ['Crowne Plaza Hotels and Resorts' 'Doubletree by Hilton' 'Hampton Inn'\n 'Hampton Inn and Suites' 'Home2' 'Homewood Suites' 'Independent' 'room' 'Airport' 'Interstate' 'Suburban' 'Urban' 'M' 'N' 'S' 'W']
 
@@ -179,7 +179,6 @@ With 24 features eliminated we have an MSE of 0.878 ['Crowne Plaza Hotels and Re
 
 
 # XGBoost approch with grid search of model(tree, linear) and parameters to fit better in dataset.
- could extract feature importance but hard to iterpret. R2, RMSE all improve.
 
 ## Parameter selected after Grid Search
 clf = XGBRegressor(
