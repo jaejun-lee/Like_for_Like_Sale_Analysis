@@ -260,3 +260,22 @@ clf = XGBRegressor(
 | Train Data R2      |       0.06 |
 | Holdout Data MSE    |     0.41 |
 | Holdout Data R2     |     0.04 |
+
+## Use case
+
+x = [[503, 'Crowne Plaza Hotels and Resorts', 'M', 'Airport']]
+
+>cluster 5
+
+>SPOR: 1.71
+
+>Profit Margin: 0.64
+
+
+|    | property_name                             | property_code   | brand   |   num_of_rooms |   revenue |   profit_margin |   gross_profit |   id | address                    | city      | state   |   zip | kind           | time_zone                   | location_type   |   flag_id | flag_name                       |   brand_id | brand_name   | brand_code   | region   | hotel_size   |     spor |   cluster |
+|---:|:------------------------------------------|:----------------|:--------|---------------:|----------:|----------------:|---------------:|-----:|:---------------------------|:----------|:--------|------:|:---------------|:----------------------------|:----------------|----------:|:--------------------------------|-----------:|:-------------|:-------------|:---------|:-------------|---------:|----------:|
+| 13 | Crowne Plaza Atlanta Airport              | IHG-ATLAT       | Crown   |            378 |  12116    |        0.658382 |        7974.02 | 6745 | 1325 Virginia Avenue       | Atlanta   | GA      | 30344 | Full Service   | Eastern Time (US & Canada)  | Airport         |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | S        | big          | 1.5394   |         5 |
+| 14 | Crowne Plaza Atlanta Perimeter at Ravinia | IHG-ATLCP       | Crown   |            495 |  15513.1  |        0.589848 |        9161.73 | 6887 | 4355 Ashford Dunwoody Road | Atlanta   | GA      | 30346 | Full Service   | Eastern Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | S        | mega         | 1.50515  |         5 |
+| 15 | Crowne Plaza Baltimore                    | IHG-BALWB       | Crown   |            385 |   3738.35 |        0.668021 |        2466.83 | 6841 | 110 West Baltimore Street  | Baltimore | MD      | 21201 | Full Service   | Eastern Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | N        | big          | 0.466343 |         5 |
+| 18 | Crowne Plaza Columbus-Downtown            | IHG - CMHOC     | Crown   |            419 |  10984    |        0.638367 |        7021.97 | 7053 | 33 East Nationwide Blvd    | Columbus  | OH      | 43215 | Full Service   | Central Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | M        | big          | 1.25901  |         5 |
+| 19 | Crowne Plaza Downtown Denver              | IHG-DENDT       | Crown   |            380 |  20393.9  |        0.619366 |       12637    | 6758 | 1450 Glenarm Place         | Denver    | CO      | 80202 | Select Service | Mountain Time (US & Canada) | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | W        | big          | 2.57752  |         5 |
