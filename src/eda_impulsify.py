@@ -5,75 +5,9 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 #need tabulate for panda markdown 10
 
-pd.options.display.max_columns = None
+import dataset
 
-#N - North East W - West M - Mid West S - South O - Other
-#C - canada
-states = {
-        'AK': 'O',
-        'AL': 'S',
-        'AR': 'S',
-        'AS': 'O',
-        'AZ': 'W',
-        'CA': 'W',
-        'CO': 'W',
-        'CT': 'N',
-        'DC': 'N',
-        'DE': 'N',
-        'FL': 'S',
-        'GA': 'S',
-        'GU': 'O',
-        'HI': 'O',
-        'IA': 'M',
-        'ID': 'W',
-        'IL': 'M',
-        'IN': 'M',
-        'KS': 'M',
-        'KY': 'S',
-        'LA': 'S',
-        'MA': 'N',
-        'MD': 'N',
-        'ME': 'N',
-        'MI': 'W',
-        'MN': 'M',
-        'MO': 'M',
-        'MP': 'O',
-        'MS': 'S',
-        'MT': 'W',
-        'NA': 'O',
-        'NC': 'S',
-        'ND': 'M',
-        'NE': 'W',
-        'NH': 'N',
-        'NJ': 'N',
-        'NM': 'W',
-        'NV': 'W',
-        'NY': 'N',
-        'OH': 'M',
-        'OK': 'S',
-        'OR': 'W',
-        'PA': 'N',
-        'PR': 'O',
-        'RI': 'N',
-        'SC': 'S',
-        'SD': 'M',
-        'TN': 'S',
-        'TX': 'S',
-        'UT': 'W',
-        'VA': 'S',
-        'VI': 'O',
-        'VT': 'N',
-        'WA': 'W',
-        'WI': 'M',
-        'WV': 'S',
-        'WY': 'W',
-        'ON': 'C',
-        'NB': 'C',
-        'QC': 'C',
-        'AB': 'C',
-        'SK': 'C',
-        'NS': 'C'
-}
+pd.options.display.max_columns = None
 
 def plot_room_distribution(df):
     fig, ax = plt.subplots(figsize=(12, 6))
@@ -94,15 +28,20 @@ def plot_boxplot_for_top5_brands(df):
     top_5 = df.groupby(by="brand_code")["property_code"].count().sort_values(ascending=False).head(5).index
     fig, ax = plt.subplots(figsize=(12, 6))
     df.loc[df['brand_code'].isin(top_5)].boxplot("spor", by="brand_code", ax=ax)
-    ax.set_title("SPOR Distribution Per Top 5 brands")
-    plt.tight_layout()
+    plt.title("SPOR Dist Per Top 5 brands")
+    plt.savefig("spor_dist_for_top4_brand.png")
 
 
 def run_analysis(df):
     pass
 
 if __name__ == '__main__':
-    df = pd.read_pickle("../data/data2019_monthly.pkl")
+
+    data = dataset.Data_2019()
+    data.load()
+    data.clean()
+    df = data.df.copy()
+
 
 # # Room Distribution.
 #     df.rooms.describe()
@@ -123,15 +62,6 @@ if __name__ == '__main__':
 #df[df.flag_name=="Hilton Garden Inn"].rooms.plot.hist()
 #df[df.flag_name=="Hilton Garden Inn"].rooms.describe()
 
-
-    #remove Platt and Blueb, only one room 
-    df[df.num_of_rooms > 10]
-    spor = np.round(df.revenue / (30.62 * 0.68 * df.num_of_rooms), 2)
-    spor.plot.hist()
-
-    # add spor and brand_code
-    df["spor"] = np.round(df.revenue / (30.62 * 0.68 * df.num_of_rooms), 2)
-    df["brand_code"] = df.property_name.apply(lambda x: x[0:5].lower())
 
     #scatter spor with 5 character category
     print(df.groupby(by="brand_code")["property_code"].count().sort_values(ascending=False).head(5).to_markdown())
@@ -188,7 +118,6 @@ if __name__ == '__main__':
     df.groupby(by=["location_type"])["spor"].hist(figsize=(12,6))
 
     # states region - South 215. Not much difference? overlap. There is 15 Canada. Will remove?
-    df["region"] = df.state.apply(lambda x: states[x])
     df_region = df.groupby(by=["region"]).agg({"property_code": "count", "spor": [np.mean, np.std]})      
     print(df_region.to_markdown())
     df.groupby(by=["region"])["spor"].hist(figsize=(12,6))

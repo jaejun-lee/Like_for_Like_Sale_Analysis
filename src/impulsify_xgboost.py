@@ -100,7 +100,7 @@ if __name__=='__main__':
     # Train Data R2: 0.42
     # Holdout Data MSE: 0.55
     # Holdout Data R2: -0.28
-
+    
     #search_best_parameters(X_train, y_train)
     #best parameters: {'booster': 'dart', 'colsample_bylevel': 0.8, 'colsample_bynode': 0.8, 'colsample_bytree': 0.8, 'gamma': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 80, 'random_state': 77, 'reg_alpha': 0.3, 'reg_lambda': 0.8, 'subsample': 0.5}
 

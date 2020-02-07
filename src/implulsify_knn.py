@@ -110,7 +110,7 @@ if __name__ == '__main__':
     
     #Hold Out Validation
     X_test = scaler.transform(X_test)
-    reg = KNeighborsRegressor(n_neighbors=10)
+    reg = KNeighborsRegressor(n_neighbors=15)
     reg.fit(X_train, y_train)
     y_train_hat = reg.predict(X_train)
     y_test_hat = reg.predict(X_test)
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     # of the practical drawbacks to KNN.  
     for p in range(1, 25):
         qe.util.tic()
-        reg, r2, feats = Eliminate_One(KNeighborsRegressor(n_neighbors=10), X_train, y_train, feats)
+        reg, r2, feats = Eliminate_One(KNeighborsRegressor(n_neighbors=15), X_train, y_train, feats)
         qe.util.toc()
         #adj_r2 = 1 - ((1 - r2)*(n_samples - 1)/(n_samples - (n_features - p) - 1))
         r2_scores[p-1] = r2
