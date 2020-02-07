@@ -10,7 +10,6 @@ class Store(object):
     '''
         Dictionary Like Class with business logic for SPOR, gross_profit
     '''
-
     def __init__(self, property_name, num_of_rooms, revenue, profit_margin, average_occupancy = IAO):
         
         self.property_name = property_name
@@ -80,12 +79,11 @@ class Impulsify(object):
             -X: nnumpy array of store 
         OUTPUT: numpy array of store - comparable stores
         '''
-        m, n = X.shape
-        y = np.array(m)
+        y = []
         for i, e in enumerate(X):
-            y[i] = Store.from_numpy(self.X[self.X.brand == e.get_brand()].to_numpy()[0]) 
+            y.append(Store.from_numpy(self.X[self.X.brand == e.get_brand()].to_numpy()[0])) 
 
-        return y
+        return np.array(y)
         
     def predict_one(self, x):
         '''
@@ -113,11 +111,16 @@ if __name__ == '__main__':
     y = model.predict_one(x)
     z = x.upgrade_to(y)
 
+    print(x)
+    print(y)
+    print(z)
+
+
     #test score function
     test_property = np.random.choice(df_X.property_name.unique(), size=90)
     df_X_test = df_X[df_X.property_name.isin(test_property)]
     df_X_train = df_X.loc[df_X.index.difference(df_X_test.index)]
-    X.brand = X.property_name.apply(lambda x: x[0:5].lower())
+    df_X_test.brand = df_X_test.property_name.apply(lambda x: x[0:5].lower())
     df_X_test = df_X_test.groupby(by="brand").agg({"num_of_rooms": np.mean, "revenue" : np.mean, "profit_margin" : np.mean}).reset_index()
     df_X_test = df_X_test.round(decimals = {"num_of_rooms": 0, "revenue" : 2, "profit_margin" : 4})
     
@@ -126,11 +129,13 @@ if __name__ == '__main__':
     model.fit(df_X)
     lst = []
     for index, row in df_X_test.iterrows():
-        lst.append(Store(row.brand, row.num_of_rooms, row.revenue, row.property_name))
+        lst.append(Store(row.brand, row.num_of_rooms, row.revenue, row.profit_margin))
     X_test = np.array(lst)
     model = Impulsify()
     model.fit(df_X)
     print(model.score(X_test))
+    #0.11
+
 
 
 
