@@ -264,15 +264,18 @@ clf = XGBRegressor(
 
 
 ## Use case
-
+INPUT
 x = [[503, 'Crowne Plaza Hotels and Resorts', 'M', 'Airport']]
 
+OUTPUT
 >cluster 5
 
 >SPOR: 1.71
 
 >Profit Margin: 0.64
 
+
+### list of comparable properties.
 
 |    | property_name                             | property_code   | brand   |   num_of_rooms |   revenue |   profit_margin |   gross_profit |   id | address                    | city      | state   |   zip | kind           | time_zone                   | location_type   |   flag_id | flag_name                       |   brand_id | brand_name   | brand_code   | region   | hotel_size   |     spor |   cluster |
 |---:|:------------------------------------------|:----------------|:--------|---------------:|----------:|----------------:|---------------:|-----:|:---------------------------|:----------|:--------|------:|:---------------|:----------------------------|:----------------|----------:|:--------------------------------|-----------:|:-------------|:-------------|:---------|:-------------|---------:|----------:|
