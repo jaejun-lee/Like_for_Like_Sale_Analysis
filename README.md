@@ -27,6 +27,7 @@ There are about 460 store observations for last year. It's a clean dataset from 
 
 # Target, business performance metrics
 > SPOR: Sales per Occupied Room = Monthly Revenue / (30.62 * Average Occupancy Rate)
+
 > Profit Margin: 1 - Monthly Cost(Cost of Good Sold)/Monthly Revenue
 
 <div style="display:flex">
@@ -42,7 +43,6 @@ There are about 460 store observations for last year. It's a clean dataset from 
 |---    |---    |---
 |Mean    |1.23  |0.61
 |STD  |0.7383    |0.0647
-
 
 # The current model solution in house
 > Brand Code Clustering
@@ -109,17 +109,18 @@ Current SPOR: $1.51
 </p>
 <p> tru b SPOR Distribution </p>
 
-<p> brand_code is easy to interpret but, SPOR distribution within does not form a pattern for several clusters and The largest cluster, hilto, is right-skewed with a long tail. There needs to sub-cluster to improve SPOR distribution.</P>
+<p> brand_code is easy to interpret but, SPOR distribution within does not form a pattern for several clusters. The largest cluster, hilto, is right-skewed with a long tail. There needs to sub-cluster to improve SPOR distribution.</P>
 
 ## Prediction Performance of brand_code
 
-| Score Metrics   |  Score       |
+| Score Metrics   |  SPOR prediction Score       |
 |:-------------|----------------:|
 | Train Data MSE  |           0.53 |
 | Train Data R2      |       0.09 |
 | Holdout Data MSE    |     0.48 |
 | Holdout Data R2     |     -0.14 |
 
+* For this project, I will try to find better segmentation of stores by extending features and different models. Also, I will check whether it will improve the prediction of SPOR. 
 
 # Additional Features: num_of_rooms, location_type, region
 
@@ -145,14 +146,20 @@ Current SPOR: $1.51
 | S        |                          215 |          1.15481   |          0.666546 |
 | W        |                           97 |          1.33447   |          0.614003 |
 
+
+* N - North East, W - West, M - Mid West, S - South, O - Other, C - canada
+
 ## num_of_rooms
-correlation with SPOR: 0.10 
-num of rooms already applied in SPOR, but there is little bit of linearity remains. 
+correlation with SPOR: 0.10
+* num of rooms is already applied in SPOR negatively, but there still remains small positive correlation with SPOR. I made decision to include it as a feature.
 
 
 # KNN approch
 
+* KNN find close distance stores from target store and calculate the average of SPOR.
+
 ## Choose 15 neighbors by CV
+* Through cross valdiation, I found that 15 of close neighbors are appropriate to caculate the average.
 <div style="display:flex">
      <div style="flex:1;padding-right:5px;">
           <img src="image/plot_mse_for_knn.png">
@@ -163,10 +170,11 @@ num of rooms already applied in SPOR, but there is little bit of linearity remai
 </div>
 
 ## by grid search for regressive elimination of feature (Step Backward), 
-15 - 20 features are appropriate to improve MSE or R2 scores. However, the score does not improve from brand_code cluster method. The close neighbors seem not to share the same interests in target, SPOR. Also, the real cluster could differ dramatically because most of the brands lean toward 2 or 3 brands. location_type and region are promising, but the region's distribution is also heavily toward the south region.
+* 15 - 20 features are appropriate to improve MSE or R2 scores. However, the score does not improve from brand_code cluster method. The close neighbors seem not to share the same interests in target, SPOR. Also, the real cluster could differ dramatically because most of the brands lean toward 2 or 3 brands. location_type and region are promising, but the region's distribution is also heavily toward the south region.
 
-With 24 features eliminated we have an MSE of 0.878 ['Crowne Plaza Hotels and Resorts' 'Doubletree by Hilton' 'Hampton Inn'\n 'Hampton Inn and Suites' 'Home2' 'Homewood Suites' 'Independent' 'room' 'Airport' 'Interstate' 'Suburban' 'Urban' 'M' 'N' 'S' 'W']
+* By example, with 24 features eliminated from 40 features, we have an MSE of 0.878 ['Crowne Plaza Hotels and Resorts' 'Doubletree by Hilton' 'Hampton Inn'\n 'Hampton Inn and Suites' 'Home2' 'Homewood Suites' 'Independent' 'room' 'Airport' 'Interstate' 'Suburban' 'Urban' 'M' 'N' 'S' 'W']
 
+* I could observe location type, region, number of rooms are still survive after eliminating 24 features. Several brand name disappear in the features.
 
 
 | Score Metrics   |  Score       |
@@ -176,6 +184,7 @@ With 24 features eliminated we have an MSE of 0.878 ['Crowne Plaza Hotels and Re
 | Holdout Data MSE    |     0.47 |
 | Holdout Data R2     |     -0.11 |
 
+* SPOR prediction does not improve.
 
 
 # XGBoost approch with grid search of model(tree, linear) and parameters to fit better in dataset.
@@ -204,8 +213,11 @@ clf = XGBRegressor(
 | Holdout Data MSE    |     0.55 |
 | Holdout Data R2     |     -0.28 |
 
+* Dart is improved decision tree model. Still it does not improve SPOR prediction in visible. 
 
-# Clustering by KPrototype
+
+# Clustering by KPrototype(Kmean)
+*  K-Prototype allow to find clusters from mixed features with numerical(number of rooms) and categorical(brand, location type, region). 
 
 ## K = 13 is best by plotting Cost function.
 
@@ -228,12 +240,11 @@ clf = XGBRegressor(
     #  78920.15376932337,
     #  79341.07766656693]
 
-* silhouette_score could not be used. Kprototype Clustering return numerical and categorical together.
-
+* Finding 13 of clusters is best based on elbow plot method. 
+* However, silhouette_score could not be used. Kprototype Clustering return numerical and categorical together. This plot is based on cost(datapoint distances from centroid in a cluster).
 
 
 ## Centeroid
-
 
 |rooms | flags | region | location type|
 |:-------------|----------------|----|----:|
@@ -251,6 +262,8 @@ clf = XGBRegressor(
 | 75.26 | Hampton Inn | S | Interstate |
 | 135.54 | Hilton Garden Inn | S | Urban |
 
+* There is total 13 clusters found and the above is list of the closest datapoint for each cluster.
+* We can see that "Hilton Garden Inn" is further segmented by size, location type and region.
 
 ## Convert Clustering as prediction model. mean of spors in each cluster. Score....
 
@@ -261,24 +274,22 @@ clf = XGBRegressor(
 | Holdout Data MSE    |     0.41 |
 | Holdout Data R2     |     0.04 |
 
+* Still prediction of SPOR is not impoved alot.
+
 ## Use case
+<p align="center">
+  <img src="image/submitstore.png" width = 800>
+</p>
+<p align="center">
+  <img src="image/compare_stores.png" width = 800>
+</p>
 
-### INPUT
-x = [[503, 'Crowne Plaza Hotels and Resorts', 'M', 'Airport']]
+* This is simple web app prototype by using clustering. 
 
-### OUTPUT
->cluster 5
-
->SPOR: 1.71
-
->Profit Margin: 0.64
-
-### list of comparable store properties
-
-|    | property_name                             | property_code   | brand   |   num_of_rooms |   revenue |   profit_margin |   gross_profit |   id | address                    | city      | state   |   zip | kind           | time_zone                   | location_type   |   flag_id | flag_name                       |   brand_id | brand_name   | brand_code   | region   | hotel_size   |     spor |   cluster |
-|---:|:------------------------------------------|:----------------|:--------|---------------:|----------:|----------------:|---------------:|-----:|:---------------------------|:----------|:--------|------:|:---------------|:----------------------------|:----------------|----------:|:--------------------------------|-----------:|:-------------|:-------------|:---------|:-------------|---------:|----------:|
-| 13 | Crowne Plaza Atlanta Airport              | IHG-ATLAT       | Crown   |            378 |  12116    |        0.658382 |        7974.02 | 6745 | 1325 Virginia Avenue       | Atlanta   | GA      | 30344 | Full Service   | Eastern Time (US & Canada)  | Airport         |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | S        | big          | 1.5394   |         5 |
-| 14 | Crowne Plaza Atlanta Perimeter at Ravinia | IHG-ATLCP       | Crown   |            495 |  15513.1  |        0.589848 |        9161.73 | 6887 | 4355 Ashford Dunwoody Road | Atlanta   | GA      | 30346 | Full Service   | Eastern Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | S        | mega         | 1.50515  |         5 |
-| 15 | Crowne Plaza Baltimore                    | IHG-BALWB       | Crown   |            385 |   3738.35 |        0.668021 |        2466.83 | 6841 | 110 West Baltimore Street  | Baltimore | MD      | 21201 | Full Service   | Eastern Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | N        | big          | 0.466343 |         5 |
-| 18 | Crowne Plaza Columbus-Downtown            | IHG - CMHOC     | Crown   |            419 |  10984    |        0.638367 |        7021.97 | 7053 | 33 East Nationwide Blvd    | Columbus  | OH      | 43215 | Full Service   | Central Time (US & Canada)  | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | M        | big          | 1.25901  |         5 |
-| 19 | Crowne Plaza Downtown Denver              | IHG-DENDT       | Crown   |            380 |  20393.9  |        0.619366 |       12637    | 6758 | 1450 Glenarm Place         | Denver    | CO      | 80202 | Select Service | Mountain Time (US & Canada) | Urban           |       131 | Crowne Plaza Hotels and Resorts |         21 | IHG          | crown        | W        | big          | 2.57752  |         5 |
+# Conculsions and Recommedation
+* There is not much improvement in SPOR prediction even employing complicated models.
+* However, K-Prototype is promising to find better clustering for current stores.
+* I could not try various parameters and initialization methods for K Prototype. We could find even better clustering by examining various custering results with business insigts.
+* The other clustering model such as "clustering hierarchical" could yield better view of how stores are devided. It is feasible with this small dataset.  
+* If we can obtain the metric of how much the current store improved after Impulsify solution, revenue could be included in the feature set.  
+* Single page app will be better flow for this requirement. 
