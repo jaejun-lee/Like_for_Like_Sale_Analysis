@@ -120,7 +120,8 @@ Current SPOR: $1.51
 | Holdout Data MSE    |     0.48 |
 | Holdout Data R2     |     -0.14 |
 
-* For this project, I will try to find better segmentation of stores by extending features and different models. Also, I will check whether it will improve the prediction of SPOR. 
+* For this project, I will try to find better segmentation of stores by extending features and different models. Also, I will check whether it will improve the prediction of SPOR.
+* I will use flag_name from properties table as brand feature instead of brand_code.
 
 # Additional Features: num_of_rooms, location_type, region
 
