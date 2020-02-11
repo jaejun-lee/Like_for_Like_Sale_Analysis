@@ -278,6 +278,9 @@ clf = XGBRegressor(
 * Still prediction of SPOR is not impoved alot.
 
 ## Use case
+* You can connect to two page simple web app to show use case of clustering model.
+* It will be available at http://54.160.190.65:8105/ for a week.
+
 <p align="center">
   <img src="image/submitstore.png" width = 800>
 </p>
@@ -285,7 +288,6 @@ clf = XGBRegressor(
   <img src="image/compare_stores.png" width = 800>
 </p>
 
-* This is simple web app prototype by using clustering. 
 
 # Conculsions and Recommedation
 * There is not much improvement in SPOR prediction even employing complicated models.
@@ -293,4 +295,4 @@ clf = XGBRegressor(
 * I could not try various parameters and initialization methods for K Prototype. We could find even better clustering by examining various custering results with business insigts.
 * The other clustering model such as "clustering hierarchical" could yield better view of how stores are devided. It is feasible with this small dataset.  
 * If we can obtain the metric of how much the current store improved after Impulsify solution, revenue could be included in the feature set.  
-* Single page app will be better flow for this requirement. 
+* Single page app will be better flow for this requirement. There is no input validation, guide, detailed business logic in this prototype.
