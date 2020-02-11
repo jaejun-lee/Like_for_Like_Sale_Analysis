@@ -294,6 +294,7 @@ clf = XGBRegressor(
 * There is not much improvement in SPOR prediction even employing complicated models.
 * However, K-Prototype is promising to find better clustering for current stores.
 * I could not try various parameters and initialization methods for K Prototype. We could find even better clustering by examining various custering results with business insigts.
-* The other clustering model such as "clustering hierarchical" could yield better view of how stores are devided. It is feasible with this small dataset.  
+* The other clustering model such as "clustering hierarchical" could yield better view of how stores are devided. It is feasible with this small dataset.
+* For clustering model, it seems better to filter out outcriers more such as SPOR < 50 or SPOR >2.50. 
 * If we can obtain the metric of how much the current store improved after Impulsify solution, revenue could be included in the feature set.  
 * Single page app will be better flow for this requirement. There is no input validation, guide, detailed business logic in this prototype.
