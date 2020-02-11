@@ -87,22 +87,25 @@ if __name__=='__main__':
 
     features = ['num_of_rooms', 'flag_name', 'region', 'location_type']
     X = data.df[features].to_numpy()
-    y = data.target_spor().to_numpy()
-    #y = data.df["revenue"].to_numpy()
+    y = data.df["revenue"].to_numpy()
 
     #shuffle
-    #X, y = shuffle(X, y, random_state = 77)
+    X, y = shuffle(X, y, random_state = 77)
 
     #split for holdout data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
+    #Standardize num_of_rooms
+    # scaler = StandardScaler()
+    # scaler.fit(X_train)
+    # X_train = scaler.transform(X_train)
+
     kproto = KPrototypes(n_clusters = 13, init = 'Cao', n_init =22, verbose = 1, random_state=4, n_jobs=4) 
     clusters = kproto.fit_predict(X, categorical=[1,2,3])
 
-
     ### ran Kprototype cost function from 10 to 20. 
     ### ***silhouette_score could not be used. clustering X value return numerical and categorical together
-    #plot_costs(X, 10, 20)
+    plot_costs(X, 10, 20)
     ### after 13, costs elbow down.
     #  [169655.69381188636,
     #  164364.36907638382,
@@ -121,23 +124,10 @@ if __name__=='__main__':
     print(kproto.cluster_centroids_)
     df = data.df.copy()
     df['cluster'] = clusters
-    
-    cluster_spor_std = df.groupby(by="cluster")["spor"].std().to_numpy()
-    cluster_spor_mean = df.groupby(by="cluster")["spor"].mean().to_numpy()
-    cluster_profit_mean = df.groupby(by="cluster")["profit_margin"].mean().to_numpy()
-    #
-    #cluster_hat = kproto.predict(np.array(x), categorical=[1,2,3])
-    # print(f"predicted_spor: {cluster_spor_mean[cluster_hat[0]]:.2f}")
-    # #1.7159
-    # print(f"predicted_profit: {cluster_profit_mean[cluster_hat[0]]:.2f}")
-    # #0.64
-    #print(f"standard variance: {np.sum(cluster_std)/cluster_std.shape}")
-    #0.7571044
-    
+     
     #### Test cluster Prediction
     X = df["cluster"].to_numpy()
-    y = data.target_spor().to_numpy()
-    #y = df["revenue"].to_numpy()
+    y = df["revenue"].to_numpy()
 
     #shuffle
     X, y = shuffle(X, y, random_state = 77)
@@ -159,50 +149,7 @@ if __name__=='__main__':
 
 
 
-["crown", 503, 6545.79, 0.44]
-
-
-    
-    #compare r2 and mse for test data
-
-#     Best run was number 8
-# [array([[151.23809524],
-#        [311.80952381],
-#        [121.38157895],
-#        [825.66666667],
-#        [ 92.49      ],
-#        [423.33333333],
-#        [216.4375    ],
-#        [105.12345679],
-#        [245.10526316],
-#        [197.76470588],
-#        [172.96296296],
-#        [ 75.25806452],
-#        [135.53846154]]), array([['Hilton Garden Inn', 'W', 'Interstate'],
-#        ['Crowne Plaza Hotels and Resorts', 'S', 'Urban'],
-#        ['Hilton Garden Inn', 'S', 'Suburban'],
-#        ['Holiday Inn Express', 'S', 'Campus'],
-#        ['Tru by Hilton', 'S', 'Suburban'],
-#        ['Crowne Plaza Hotels and Resorts', 'N', 'Urban'],
-#        ['Doubletree by Hilton', 'W', 'Urban'],
-#        ['Hilton Garden Inn', 'S', 'Suburban'],
-#        ['Embassy Suites', 'S', 'Urban'],
-#        ['Crowne Plaza Hotels and Resorts', 'S', 'Urban'],
-#        ['Hilton Garden Inn', 'S', 'Urban'],
-#        ['Hampton Inn', 'S', 'Interstate'],
-#        ['Hilton Garden Inn', 'S', 'Urban']], dtype='<U31')]
-# Train Data MSE: 0.55
-# Train Data R2: 0.06
-# Holdout Data MSE: 0.41
-# Holdout Data R2: 0.04
-
-
-
-
-
-
-#df.groupby(by="cluster").hist(["spor"])
-
+# ["crown", 503, 6545.79, 0.44]
 
 # import pickle
 

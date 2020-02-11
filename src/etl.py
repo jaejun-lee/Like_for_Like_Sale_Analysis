@@ -186,6 +186,10 @@ class Pipeline(object):
         #filter Profit Margin > 0.72, no COGS
         mask = self.data2019["Profit Margin"] <= 0.72
         self.data2019 = self.data2019[mask]
+        #filter revenue <= 500, still launching 
+        mask = self.data2019["Revenue"] > 500
+        self.data2019 = self.data2019[mask]
+
         #drop sub total row
         self.data2019.dropna(subset=["Property Code"], inplace=True)
         self.data2019.rename(columns={

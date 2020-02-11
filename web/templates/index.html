@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Impulsify
+{% endblock %}
+
+{% block body %}
+<h1>Submit Store Information</h1>
+
+<form action="{{ url_for('reco') }}" method="post">
+
+    <div class="form-group">
+        <label for="property_name">Property Name:</label>
+        <input type="text" class="form-control" id="property_name" name="property_name" value="Crowne Plaza Chicago O’Hare Hotel & Conference Center">
+    </div>
+    <div class="form-group">
+        <label for="property_code">Property Code:</label>
+        <input type="text" class="form-control" id="property_code" name="property_code" value="CHIOK">
+    </div>
+    <div class="form-group">
+        <label for="flag_name">Flag Name:</label>
+        <input type="text" class="form-control" id="flag_name" name="flag_name" value="Crowne Plaza Hotels and Resorts">
+    </div>
+    <div class="form-group">
+        <label for="num_of_rooms">Number of Rooms:</label>
+        <input type="number" class="form-control" id="num_of_rooms" name="num_of_rooms" value="503">
+    </div>
+    <div class="form-group">
+        <label for="location_type">Location Type:</label>
+        <input type="text" class="form-control" id="location_type" name="location_type" value="Airport">
+    </div>
+    <div class="form-group">
+        <label for="state">State:</label>
+        <input type="text" class="form-control" id="state" name="state" value="IL">
+    </div>
+    <div class="form-group">
+        <label for="revenue">Momthly Revenue:</label>
+        <input type="number" step="0.01" class="form-control" id="revenue" name="revenue" value="6545.79">
+    </div>
+    <div class="form-group">
+        <label for="profit_margin">Profit Margin:</label>
+        <input type="number" step="0.01" class="form-control" id="profit_margin" name="profit_margin" value="0.44">
+    </div>
+    <div class="form-group">
+        <label for="occupancy_rate">Occupancy Rate:</label>
+        <input type="number" step="0.01" class="form-control" id="occupancy_rate" name="occupancy_rate" value="0.85">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary">Submit</button>
+    </div>
+</form>
+
+{% endblock %}

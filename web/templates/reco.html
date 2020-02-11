@@ -1,0 +1,132 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Impulsify
+{% endblock %}
+
+{% block body %}
+<h1> Impulsify Solution</h1>
+</br>
+<table class="center">
+    <caption>Your Store Information</caption>
+    <thead>
+      <th>Property Name</th>
+      <th>Property Code</th>
+      <th>Brand Name</th>
+      <th>Room Count</th>
+      <th>State</th>
+      <th>Location Type</th>
+      <th>Average Occupancy</th>
+      <th>revenue</th>
+      <th>profit_margin</th>
+      <th>SPOR</th>
+      <th>Gross Profit</th>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{store.property_name}}</td>
+          <td>{{store.property_code}}</td>
+          <td>{{store.flag_name}}</td>
+          <td>{{store.num_of_rooms}}</td>
+          <td>{{store.state}}</td>
+          <td>{{store.location_type}}</td>
+          <td>{{store.occupancy_rate}}</td>
+          <td>{{"%.2f"|format(store.revenue)}}</td>
+          <td>{{"%.2f"|format(store.profit_margin)}}</td>
+          <td>{{"%.2f"|format(store.get_spor())}}</td>
+          <td>{{"%.2f"|format(store.get_gross_profit())}}</td>
+        </tr>
+    </tbody>
+</table>
+
+</br>
+</br>
+
+<table class="center">
+    <caption>Results of Comparable Stores Category {{cluster}}</caption>
+    <thead>
+        <th>SPOR</th>
+        <th>Profit Margin</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{"%.2f"|format(store_hat.get_spor())}}</td>
+            <td>{{"%.2f"|format(store_hat.profit_margin)}}</td>
+        </tr>
+    </tbody>
+</table>
+
+</br>
+</br>
+
+<table class="center">
+    <caption>Your Store Information after Impulsify Solution</caption>
+    <thead>
+      <th>Property Name</th>
+      <th>Property Code</th>
+      <th>Brand Name</th>
+      <th>Room Count</th>
+      <th>State</th>
+      <th>Location Type</th>
+      <th>Average Occupancy</th>
+      <th>revenue</th>
+      <th>profit_margin</th>
+      <th>SPOR</th>
+      <th>Gross Profit</th>
+    </thead>
+    <tbody>
+        <tr>
+          <td>{{store_hat.property_name}}</td>
+          <td>{{store_hat.property_code}}</td>
+          <td>{{store_hat.flag_name}}</td>
+          <td>{{store_hat.num_of_rooms}}</td>
+          <td>{{store_hat.state}}</td>
+          <td>{{store_hat.location_type}}</td>
+          <td>{{store_hat.occupancy_rate}}</td>
+          <td>{{"%.2f"|format(store_hat.revenue)}}</td>
+          <td>{{"%.2f"|format(store_hat.profit_margin)}}</td>
+          <td>{{"%.2f"|format(store_hat.get_spor())}}</td>
+          <td>{{"%.2f"|format(store_hat.get_gross_profit())}}</td>
+        </tr>
+    </tbody>
+</table>
+
+</br>
+</br>
+
+<table class="center">
+    <caption>List of Comparable Stores</caption>
+    <thead>
+      <th>Property Name</th>
+      <th>Property Code</th>
+      <th>Brand Name</th>
+      <th>Room Count</th>
+      <th>State</th>
+      <th>Location Type</th>
+      <th>Average Occupancy</th>
+      <th>revenue</th>
+      <th>profit_margin</th>
+      <th>SPOR</th>
+      <th>Gross Profit</th>
+    </thead>
+    <tbody>
+        {% for s in stores %}
+        <tr>
+          <td>{{s[0]}}</td>
+          <td>{{s[1]}}</td>
+          <td>{{s[16]}}</td>
+          <td>{{s[3]}}</td>
+          <td>{{s[10]}}</td>
+          <td>{{s[14]}}</td>
+          <td>0.68</td>
+          <td>{{"%.2f"|format(s[4])}}</td>
+          <td>{{"%.2f"|format(s[5])}}</td>
+          <td>{{"%.2f"|format(s[22])}}</td>
+          <td>{{"%.2f"|format(s[6])}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
