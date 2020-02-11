@@ -280,6 +280,7 @@ clf = XGBRegressor(
 ## Use case
 * You can connect to two page simple web app to show use case of clustering model.
 * It will be available at http://54.160.190.65:8105/ for a week.
+* submit store page is pre-filled with Crown Plaza hotel information for testing. 
 
 <p align="center">
   <img src="image/submitstore.png" width = 800>
