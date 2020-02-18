@@ -50,14 +50,14 @@ def plot_costs(X, min_k, max_k):
     return costs
 
 class Cluster_Regression(object):
-    '''dummy class for Cluster Prediction Model'''
+    '''Hybrid Model of clustering plus prediction for impulsify'''
 
     def __init__(self):
         self.model = defaultdict(float)
 
     def fit(self, X, y):
-        '''cluster X by brand and average y
-            -X: np array of brand_code
+        '''train to predict spor by mean of each cluster x
+            -X: np array of clustering number
             -y: np array of spor
         OUTPUT: None
         '''
@@ -70,7 +70,7 @@ class Cluster_Regression(object):
     def predict(self, X):
         '''
         INPUT:
-            -X: nnumpy array of brand_code 
+            -X: nnumpy array of clustering number
         OUTPUT: numpy array of predicted spor
         '''
         y = []
@@ -96,9 +96,7 @@ if __name__=='__main__':
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25)
 
     #Standardize num_of_rooms
-    # scaler = StandardScaler()
-    # scaler.fit(X_train)
-    # X_train = scaler.transform(X_train)
+
 
     kproto = KPrototypes(n_clusters = 13, init = 'Cao', n_init =22, verbose = 1, random_state=4, n_jobs=4) 
     clusters = kproto.fit_predict(X, categorical=[1,2,3])
@@ -119,15 +117,16 @@ if __name__=='__main__':
     #  78920.15376932337,
     #  79341.07766656693]
 
-    #develpe prediction model returning score mean of cluster.
-    
     print(kproto.cluster_centroids_)
+    
+
+    #develpe prediction model returning score mean of cluster.
     df = data.df.copy()
     df['cluster'] = clusters
      
     #### Test cluster Prediction
     X = df["cluster"].to_numpy()
-    y = df["revenue"].to_numpy()
+    y = data.target_spor().to_numpy()
 
     #shuffle
     X, y = shuffle(X, y, random_state = 77)
