@@ -13,8 +13,9 @@ import matplotlib.pyplot as plt
 plt.style.use('ggplot')
 #need tabulate for panda markdown 10
 
-from sklearn.metrics import mean_squared_error
-from sklearn.metrics import r2_score
+from sklearn.metrics import f1_score
+from sklearn.metrics import recall_score
+
 
 from sklearn.model_selection import train_test_split
 from sklearn.utils import shuffle
@@ -72,6 +73,10 @@ if __name__=='__main__':
     #split for holdout data
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=77)
 
+    #Standardize X_train
+    scaler = StandardScaler()
+    scaler.fit(X_train)
+    X_train = scaler.transform(X_train)
 
     clf = XGBRegressor(
         objective='reg:squarederror',
@@ -92,10 +97,10 @@ if __name__=='__main__':
     y_train_hat = clf.predict(X_train)
     y_test_hat = clf.predict(X_test)
 
-    print(f"Train Data MSE: {mean_squared_error(y_train, y_train_hat):.2f}")
-    print(f"Train Data R2: {r2_score(y_train, y_train_hat):.2f}")
-    print(f"Holdout Data MSE: {mean_squared_error(y_test, y_test_hat):.2f}")
-    print(f"Holdout Data R2: {r2_score(y_test, y_test_hat):.2f}")
+    print(f"Train Data F1: {f1_score(y_train, y_train_hat):.2f}")
+    print(f"Train Data Recall: {recall_score(y_train, y_train_hat):.2f}")
+    print(f"Holdout Data F1: {f1_score(y_test, y_test_hat):.2f}")
+    print(f"Holdout Data Recall: {recall_score(y_test, y_test_hat):.2f}")
     # Train Data MSE: 0.34
     # Train Data R2: 0.42
     # Holdout Data MSE: 0.55
@@ -104,6 +109,8 @@ if __name__=='__main__':
     #search_best_parameters(X_train, y_train)
     #best parameters: {'booster': 'dart', 'colsample_bylevel': 0.8, 'colsample_bynode': 0.8, 'colsample_bytree': 0.8, 'gamma': 0.5, 'learning_rate': 0.1, 'max_depth': 3, 'n_estimators': 80, 'random_state': 77, 'reg_alpha': 0.3, 'reg_lambda': 0.8, 'subsample': 0.5}
 
+    xgb_gridsearch.fit(X, y)
+    print(f"best parameters: {xgb_gridsearch.best_params_}")
     
 
     

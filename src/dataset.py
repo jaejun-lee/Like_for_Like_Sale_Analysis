@@ -22,8 +22,7 @@ class Data_2019(object):
         self.df = self.df[self.df.num_of_rooms > 10]
     
     def load(self):
-        
-        
+           
         #add brand_code
         self.df["brand_code"] = self.df.property_name.apply(lambda x: x[0:5].lower())
         #add region 
@@ -37,7 +36,16 @@ class Data_2019(object):
         DIM = 30.62 #approximate days in a month
         IAO = 0.68 #Industry Average Occupancy Rate
         self.df["spor"] = self.df.revenue / (DIM * IAO * self.df.num_of_rooms)
-
+        #add new_flag_name to refine the segment of brands to be used in Kprototype
+        self.df["new_flag_name"] = self.df["flag_name"]
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Curio by Hilton"] = "Hilton"
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Hilton Suites"] = "Hilton"
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Hilton Suites"] = "Hilton"
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Holiday Inn"] = "Holiday"
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Holiday Inn Express"] = "Holiday"
+        self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Holiday Inn Express & Suites"] = "Holiday"
+        lst_brands = ["Crowne Plaza Hotels and Resorts", "Doubletree by Hilton", "Embassy Suites", "Hampton Inn", "Hampton Inn and Suites", "Hilton Garden Inn", "Home2", "Homewood Suites", "Tru by Hilton", "Hilton", "Holiday"]
+        self.df["new_flag_name"].loc[~self.df["new_flag_name"].isin(lst_brands)] = "Others"
 
     ### Hotcode Features. Categorized
     def fauture_brand_code(self):

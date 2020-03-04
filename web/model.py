@@ -67,8 +67,8 @@ class Impulsify(object):
     '''dummy class for Cluster Prediction Model'''
 
     def __init__(self):
-        self.model = pd.read_pickle("../data/model.pkl")
-        with open('../data/kproto.pkl', 'rb') as handle:
+        self.model = pd.read_pickle("./data/model.pkl")
+        with open('./data/kproto.pkl', 'rb') as handle:
             self.kproto = pickle.load(handle)
 
     def predict(self, store):
@@ -87,6 +87,6 @@ class Impulsify(object):
     
     def predict_comparable_stores(self, store, num = 3):
         cluster = self.predict(store)
-        return self.model[self.model.cluster==cluster].head(num).to_numpy()
+        return self.model[(self.model.cluster==cluster) & (self.model.flag_name == store.flag_name) ].head(num).to_numpy()
 
     
