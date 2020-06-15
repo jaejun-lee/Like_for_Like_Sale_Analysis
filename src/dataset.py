@@ -45,7 +45,7 @@ class Data_2019(object):
         self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Holiday Inn Express"] = "Holiday"
         self.df["new_flag_name"].loc[self.df["new_flag_name"]=="Holiday Inn Express & Suites"] = "Holiday"
         lst_brands = ["Crowne Plaza Hotels and Resorts", "Doubletree by Hilton", "Embassy Suites", "Hampton Inn", "Hampton Inn and Suites", "Hilton Garden Inn", "Home2", "Homewood Suites", "Tru by Hilton", "Hilton", "Holiday"]
-        self.df["new_flag_name"].loc[~self.df["new_flag_name"].isin(lst_brands)] = "Others"
+        self.df["new_flag_name"].loc[~(self.df["new_flag_name"].isin(lst_brands))] = "Others"
 
     ### Hotcode Features. Categorized
     def fauture_brand_code(self):
